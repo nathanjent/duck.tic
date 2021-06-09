@@ -1,0 +1,115 @@
+-- title:  Duck
+-- author: Nathan Jent
+-- desc:   short description
+-- script: moon
+
+t=0
+x=96
+y=24
+q={}
+player={
+ x: 0
+ y: 0
+ tic: 1
+ elapsed: 0
+ state: 1
+ dir: 0
+ states: {
+  {
+   frames: { 257, 257, 257, 257, 257 }
+  },
+  {
+   frames: { 257, 260, 261, 260, 261  }
+  }
+ }
+}
+
+update = (t) ->
+ player.state = 1
+ player.elapsed += 1
+ if player.elapsed > 10
+  player.elapsed = 0
+  player.tic += 1
+  if player.tic > 5
+   player.tic = 1
+
+ if btn(0)
+  player.y -= 1
+  player.state = 2
+  player.dir = 0
+ if btn(1)
+  player.y += 1
+  player.state = 2
+  player.dir = 1
+ if btn(2) 
+  player.x -= 1
+  player.state = 2
+  player.dir = 2
+ if btn(3) 
+  player.x += 1
+  player.state = 2
+  player.dir = 3
+
+draw = (t) ->
+ cls(2)
+ print("t: "..t,10,10)
+ print("dir: "..player.dir,10,18)
+
+ frame = player.states[player.state].frames[player.tic]
+ flip = 0
+ if player.dir == 2
+  flip = 1
+ spr(frame,player.x,player.y,0,1,flip)
+
+export TIC = ->
+ update t
+ draw t 
+ t += 1
+
+-- <TILES>
+-- 236:baaaabbbaabbbaaabbaaaaaaaaabaabbaababbaabbaaaaaaaaaabbbbabbbaaaa
+-- 237:baaaabbbaabbbaaabbaaaaaaaaabaabbaababbaabbaaaaaaaaaabbbbabbbaaaa
+-- 238:baaaabbbaabbbaaabbaaaaaaaaabaabbaababbaabbaaaaaaaaaabbbbabbbaaaa
+-- 239:baaaabbbaabbbaaabbaaaaaaaaabaabbaababbaabbaaaaaaaaaabbbbabbbaaaa
+-- 252:baaaabbbaabbbaaabbaaaaaaaaabaabbaababbaabbaaaaaaaaaabbbbabbbaaaa
+-- 253:baaaabbbaabbbaaabbaaaaaaaaabaabbaababbaabbaaaaaaaaaabbbbabbbaaaa
+-- 254:baaaabbbaabbbaaabbaaaaaaaaabaabbaababbaabbaaaaaaaaaabbbbabbbaaaa
+-- 255:baaaabbbaabbbaaabbaaaaaaaaabaabbaababbaabbaaaaaaaaaabbbbabbbaaaa
+-- </TILES>
+
+-- <SPRITES>
+-- 001:0000eee00000ef700000e733d777e7000dd77700007777000003000000033000
+-- 002:000000000000eee00000ef700000e733d777e7000dd777000077770000033000
+-- 003:0000eee000007fe0000337e0d77777e00dd77700007777000003000000033000
+-- 004:0000eee00000ef700000e733d777e7000dd77700007777000033300000303300
+-- 005:0000eee00000ef700000e733d777e7000dd77700007777000003300000030300
+-- 205:000000000000000000000000000000080000008800000889000088990000889a
+-- 206:0000000000000000888888008999988899aa99999aaaaa99aa999aaaa9999999
+-- 207:0000000000000000000000008000880088888880998899809999988099998800
+-- 221:0000889a0000889900000889000000880000008800000889000888998888556a
+-- 222:a9999999aa9999889aa99988956999985447999864579999a7799999aa999999
+-- 223:8888800080000000800000008800000088000000888000009880000098880000
+-- 236:0000088800008889000888990088899a008899aa08889a660889964408896444
+-- 237:89966447999746479aa74477aaaa7779aaa99999779999994779999964799999
+-- 238:a999999999999999999999999999999999999999999999999999999899999988
+-- 239:9988000099880000998800009988000098800000888000008800000080000000
+-- 252:08897444088967460889977408899a67088899aa088899aa0088899a00088899
+-- 253:5479999946799999679999997a999999aa999999aaa99999aaaa9999aaaaaa99
+-- 254:9999988899999888999998889999998899999998999999999999999999999999
+-- 255:0000000000000000000000008000000088000000888000009888000099888000
+-- </SPRITES>
+
+-- <WAVES>
+-- 000:00000000ffffffff00000000ffffffff
+-- 001:0123456789abcdeffedcba9876543210
+-- 002:0123456789abcdef0123456789abcdef
+-- </WAVES>
+
+-- <SFX>
+-- 000:000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000304000000000
+-- </SFX>
+
+-- <PALETTE>
+-- 000:1a1c2c5d275db13e53ef7d57ffcd75a7f07038b76425717929366f3b5dc941a6f673eff7f4f4f494b0c2566c86333c57
+-- </PALETTE>
+
