@@ -16,10 +16,10 @@ player={
  dir: 0
  states: {
   {
-   frames: { 257, 257, 257, 257, 257 }
+   frames: { 257, 257, 257, 257, 257, 257 }
   },
   {
-   frames: { 257, 260, 261, 260, 261  }
+   frames: { 257, 260, 261, 257, 260, 260  }
   }
  }
 }
@@ -30,7 +30,7 @@ update = (t) ->
  if player.elapsed > 10
   player.elapsed = 0
   player.tic += 1
-  if player.tic > 5
+  if player.tic > 6
    player.tic = 1
 
  if btn(0)
