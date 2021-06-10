@@ -4,12 +4,9 @@
 -- script: moon
 
 t=0
-x=96
-y=24
-q={}
 p={
- x: 0
- y: 0
+ x: 96
+ y: 24
  tic: 1
  elapsed: 0
  state: 1
@@ -29,6 +26,12 @@ p={
    w: 3
    h: 2
    frames: { 336 }
+  },
+  {
+   w: 2
+   h: 2
+   offsetflipx: -32
+   frames: { 368 }
   }
  }
 }
@@ -44,6 +47,8 @@ update = (t) ->
 
  if btn(4)
   p.state = 3
+ if btn(5)
+  p.state = 4
  if btn(0)
   p.y -= 1
   p.state = 2
@@ -60,9 +65,9 @@ update = (t) ->
   p.flip = 0
 
 draw = (t) ->
- cls(2)
+ cls(11)
  print("t: #{t}",1,1)
- print("p.tic: #{p.tic}",1,8)
+ print("p.tic: #{p.tic}, p.x: #{p.x}, p.y: #{p.y}",1,8)
 
  sdata = p.states[p.state]
  frame = 1
@@ -73,7 +78,13 @@ draw = (t) ->
 
  print("frames: #{#sdata.frames}",1,16)
  print("frame: #{frame}",1,24)
- spr(frame,p.x,p.y,0,1,p.flip,0,sdata.w,sdata.h)
+ offsetx = 0
+ if p.offsetflipx and p.flip == 1
+  offsetx = p.offsetflipx
+
+ print("offsetx: #{offsetx}",1,30)
+
+ spr(frame,p.x+offsetx,p.y,0,1,p.flip,0,sdata.w,sdata.h)
 
 export TIC = ->
  update(t)
@@ -81,14 +92,10 @@ export TIC = ->
  t += 1
 
 -- <TILES>
--- 236:baaaabbbaabbbaaabbaaaaaaaaabaabbaababbaabbaaaaaaaaaabbbbabbbaaaa
--- 237:baaaabbbaabbbaaabbaaaaaaaaabaabbaababbaabbaaaaaaaaaabbbbabbbaaaa
--- 238:baaaabbbaabbbaaabbaaaaaaaaabaabbaababbaabbaaaaaaaaaabbbbabbbaaaa
--- 239:baaaabbbaabbbaaabbaaaaaaaaabaabbaababbaabbaaaaaaaaaabbbbabbbaaaa
--- 252:baaaabbbaabbbaaabbaaaaaaaaabaabbaababbaabbaaaaaaaaaabbbbabbbaaaa
--- 253:baaaabbbaabbbaaabbaaaaaaaaabaabbaababbaabbaaaaaaaaaabbbbabbbaaaa
--- 254:baaaabbbaabbbaaabbaaaaaaaaabaabbaababbaabbaaaaaaaaaabbbbabbbaaaa
--- 255:baaaabbbaabbbaaabbaaaaaaaaabaabbaababbaabbaaaaaaaaaabbbbabbbaaaa
+-- 238:baaaaaabaabbbbbabbaaaaaaaaabbaabaabaabbabbaaaaaaaaabbabbabbaabaa
+-- 239:bbaaaaabaaaabbbaabbbaaaabaaaaabbaaabbbaaabbaaaaabaaaaabbaabbbbaa
+-- 254:bbaaaaabaaaabbbaabbbaaaabaaaaabbaaabbbaaabbaaaaabaaaaabbaabbbbaa
+-- 255:baaaaaabaabbbbbabbaaaaaaaaabbaabaabaabbabbaaaaaaaaabbabbabbaabaa
 -- </TILES>
 
 -- <SPRITES>
@@ -114,7 +121,7 @@ export TIC = ->
 -- 064:0dd7777700dd7777000ddddd0000777700000077000000030000003000000033
 -- 065:7777700077777000777770007777000077700000040000000440000000440000
 -- 066:0dd7777700dd7777000ddddd0000777700000077000000030000033000000300
--- 067:7777700077777000777770007777000077700000400000004000000044400000
+-- 067:7777700077777000777770007777000077700000400000004000000044000000
 -- 068:0dd7777700dd7777000ddddd0000777700000077000000040000004400000040
 -- 069:7777700077777000777770007777000077700000400000003000000033000000
 -- 080:00000000000000000000000000000000000000000000000000000000dd777777
@@ -123,6 +130,10 @@ export TIC = ->
 -- 096:0dd7777700dd7777000ddddd0000777700000077000000070000000400000004
 -- 097:7777000e777777ee777777ee777777ee777700ee7770000e0300000e44330000
 -- 098:eeee0000777700007f7700007774000077444400000000000000000000000000
+-- 112:0000000000000000dd7000000d7700000d77700000d7770000d77777000d7777
+-- 113:0eeee000eeeeee00ee777700ee7f77dd0e7774d07e774444ee777d00e777dd00
+-- 128:0077dd77007777dd000777770000777700000077000000040000000400000004
+-- 129:77777d0077777000777770007777000077700000030000000300000044330000
 -- 205:000000000000000000000000000000080000008800000889000088990000889a
 -- 206:0000000000000000888888008999988899aa99999aaaaa99aa999aaaa9999999
 -- 207:0000000000000000000000008000880088888880998899809999988099998800
