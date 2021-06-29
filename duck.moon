@@ -12,17 +12,17 @@ objs={
   flip:0
   states:{
    -- idle
-   { w:2, h:2, frames:{ 272 } },
+   {w:2,h:2,frames:{272}},
    -- walking
    {
     w:2
     h:2
-    frames:{ 304, 306, 308, 304, 306, 308 }
+    frames:{304,306,308,304,306,308}
    },
    -- ducking
-   { w:3, h:2, frames:{ 336 } },
+   {w:3,h:2,frames:{336}},
    -- quacking
-   { w:2, h:2, frames:{ 368 } },
+   {w:2,h:2,frames:{368}},
   }
  },
  {
@@ -35,10 +35,10 @@ objs={
  }
 }
 
-is_wall = (tile_id) ->
- fget(tile_id,0)
+is_wall=(tile_id)->
+ fget tile_id,0
 
-update = (t) ->
+update=(t)->
  p=objs[1]
  p.state = 1
  p.elapsed += 1
@@ -50,25 +50,25 @@ update = (t) ->
    p.tic = 1
   p.holding = false
 
- if btn(4)
-  p.state = 3
- if btn(5)
+ if btn 5
   p.state = 4
- if btnp(5)
-  sfx(0,"G-4",15)
- if btn(6)
+ if btn 4
+  p.state = 3
+ if btnp 5
+  sfx 0,"G-4",15
+ if btn 6
   p.holding = true
- if btn(0)
+ if btn 0
   p.y -= 1
   p.state = 2
- if btn(1)
+ if btn 1
   p.y += 1
   p.state = 2
- if btn(2)
+ if btn 2
   p.x -= 1
   p.state = 2
   p.flip = 1
- elseif btn(3)
+ elseif btn 3
   p.x += 1
   p.state = 2
   p.flip = 0
@@ -83,22 +83,22 @@ draw_obj=(obj)->
 
  spr(frame,obj.x,obj.y,0,1,obj.flip,0,sdata.w or 1,sdata.h or 1)
 
- current_tile = mget(obj.x/8,obj.y/8)
- print("current_tile: #{current_tile}",0,0,2)
- if is_wall(current_tile)
-  print("hit",0,16,2)
+ current_tile = mget obj.x/8,obj.y/8
+ print "current_tile: #{current_tile}",0,0,2
+ if is_wall current_tile
+  print "hit",0,16,2
 
 draw=(t)->
- cls(11)
- map(0,0,40,40,0,0)
+ cls 11
+ map 0,0,40,40,0,0
  for obj in *objs
-  draw_obj(obj)
+  draw_obj obj
 
--- music(0,0)
+music 0,0
 
 export TIC = ->
- update(t)
- draw(t)
+ update t
+ draw t
  t += 1
 
 -- <TILES>
