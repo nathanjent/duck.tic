@@ -5,32 +5,37 @@
 
 export class Player
  new:(o)=>
-  @elapsed=0
-  if o
-   @x=o.x or 96
-   @y=o.y or 24
-  else
-   @x=96
-   @y=24
-  trace "idling..."
- up:=>
-  WalkingPlayer @
- down:=>
-  WalkingPlayer @
- left:=>
-  WalkingPlayer @
- right:=>
-  WalkingPlayer @
+  if o == nil then o={}
+  @elapsed=o.elapsed or 0
+  @x=o.x or 96
+  @y=o.y or 24
+  @cur_frame=o.cur_frame or 1
+  @frame_elapsed=o.frame_elapsed or 0
+ up:=>WalkingPlayer @
+ down:=>WalkingPlayer @
+ left:=>WalkingPlayer @
+ right:=>WalkingPlayer @
  stop:=>
   @elapsed=0
   Player @
+ frames:{
+  {id:1,w:2,h:2,hold:160}
+  {id:3,w:2,h:2,hold:5}
+ }
  draw:(t)=>
-  spr 1+(t%60)//30*2,@x,@y,14,3,0,0,2,2
+  @frame_elapsed+=1
+  print("frame_elapsed: #{@frame_elapsed}",0,16,2)
+  if @cur_frame > #@frames
+   @cur_frame=1
+   @frame_elapsed=0
+  frame=@frames[@cur_frame]
+  if @frame_elapsed > frame.hold
+   @cur_frame+=1
+   @frame_elapsed=0
+  spr frame.id,@x,@y,14,3,0,0,2,2
 
 export class WalkingPlayer extends Player
- new:(o)=>
-  super o
-  trace "walking..."
+ new:(o)=>super o
  up:=>
   @y-=1
   WalkingPlayer @
@@ -53,7 +58,7 @@ t=0
 
 update=(t)->
  p.elapsed+=1
- if p.elapsed > 10
+ if p.elapsed > 60
   p=p\stop!
  if btn 0
   p=p\up!
