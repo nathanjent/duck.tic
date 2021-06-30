@@ -11,10 +11,19 @@ export class Player
   @y=o.y or 24
   @cur_frame=o.cur_frame or 1
   @frame_elapsed=o.frame_elapsed or 0
- up:=>WalkingPlayer @
- down:=>WalkingPlayer @
- left:=>WalkingPlayer @
- right:=>WalkingPlayer @
+  @direction=o.direction or 2
+ up:=>
+  @direction=0
+  WalkingPlayer @
+ down:=>
+  @direction=1
+  WalkingPlayer @
+ left:=>
+  @direction=2
+  WalkingPlayer @
+ right:=>
+  @direction=3
+  WalkingPlayer @
  stop:=>
   @elapsed=0
   Player @
@@ -22,6 +31,7 @@ export class Player
   {id:1,w:2,h:2,hold:160}
   {id:3,w:2,h:2,hold:5}
  }
+ update:(t)=>{}
  draw:(t)=>
   @frame_elapsed+=1
   print("frame_elapsed: #{@frame_elapsed}",0,16,2)
@@ -36,21 +46,29 @@ export class Player
 
 export class WalkingPlayer extends Player
  new:(o)=>super o
- up:=>
-  @y-=1
-  @
- down:=>
-  @y+=1
-  @
- left:=>
-  @x-=1
-  @
- right:=>
-  @x+=1
-  @
+ up:=>@
+ down:=>@
+ left:=>@
+ right:=>@
  stop:=>
   @elapsed=0
   Player @
+ frames:{
+  {id:1,w:2,h:2,hold:12}
+  {id:5,w:2,h:2,hold:12}
+  {id:7,w:2,h:2,hold:12}
+  {id:9,w:2,h:2,hold:12}
+ }
+ update:(t)=>
+  switch @direction
+   when 0
+    @y-=1
+   when 1
+    @y+=1
+   when 2
+    @x-=1
+   when 3
+    @x+=1
  draw:(t)=>super t
 
 p=Player!
@@ -69,6 +87,8 @@ update=(t)->
  if btn 3
   p=p\right!
 
+ p\update t
+
 draw=(t)->
  cls 13
  print("time: #{t}",0,0,2)
@@ -85,10 +105,22 @@ export TIC=->
 -- 002:ccccceee8888cceeaaaa0cee888a0ceeccca0ccc0cca0c0c0cca0c0c0cca0c0c
 -- 003:eccccccccc888888caaaaaaaca888888cacccccccacccccccacc0ccccacc0ccc
 -- 004:ccccceee8888cceeaaaa0cee888a0ceeccca0cccccca0c0c0cca0c0c0cca0c0c
+-- 005:eccccccccc888888caaaaaaaca888888cacccccccacc0ccccacc0ccccacc0ccc
+-- 006:ccccceee8888cceeaaaa0cee888a0ceeccca0ccc0cca0c0c0cca0c0c0cca0c0c
+-- 007:eccccccccc888888caaaaaaaca888888cacccccccacc0ccccacc0ccccacc0ccc
+-- 008:ccccceee8888cceeaaaa0cee888a0ceeccca0ccc0cca0c0c0cca0c0c0cca0c0c
+-- 009:eccccccccc888888caaaaaaaca888888cacccccccacc0ccccacc0ccccacc0ccc
+-- 010:ccccceee8888cceeaaaa0cee888a0ceeccca0ccc0cca0c0c0cca0c0c0cca0c0c
 -- 017:cacccccccaaaaaaacaaacaaacaaaaccccaaaaaaac8888888cc000cccecccccec
 -- 018:ccca00ccaaaa0ccecaaa0ceeaaaa0ceeaaaa0cee8888ccee000cceeecccceeee
 -- 019:cacccccccaaaaaaacaaacaaacaaaaccccaaaaaaac8888888cc000cccecccccec
 -- 020:ccca00ccaaaa0ccecaaa0ceeaaaa0ceeaaaa0cee8888ccee000cceeecccceeee
+-- 021:cacccccccaaaaaaacaaacaaacaaaaccccaaaaaaac8888888c000ccccccccceec
+-- 022:ccca00ccaaaa0ccecaaa0ceeaaaa0ceeaaaa0cee8888ccee000cceeecccceeee
+-- 023:cacccccccaaaaaaacaaacaaacaaaaccccaaaaaaac8888888ccc000c0eecccccc
+-- 024:ccca00ccaaaa0ccecaaa0ceeaaaa0ceeaaaa0cee8888ccee00ccceeeccceeeee
+-- 025:cacccccccaaaaaaacaaacaaacaaaaccccaaaaaaac8888888cc000cc0eccccccc
+-- 026:ccca00ccaaaa0ccecaaa0ceeaaaa0ceeaaaa0cee8888ccee00ccceeeccceeeee
 -- </TILES>
 
 -- <WAVES>
