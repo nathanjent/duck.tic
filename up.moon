@@ -38,16 +38,16 @@ export class WalkingPlayer extends Player
  new:(o)=>super o
  up:=>
   @y-=1
-  WalkingPlayer @
+  @
  down:=>
   @y+=1
-  WalkingPlayer @
+  @
  left:=>
   @x-=1
-  WalkingPlayer @
+  @
  right:=>
   @x+=1
-  WalkingPlayer @
+  @
  stop:=>
   @elapsed=0
   Player @
