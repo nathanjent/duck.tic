@@ -9,21 +9,12 @@ export class Player
   @elapsed=o.elapsed or 0
   @x=o.x or 96
   @y=o.y or 24
+  @spdx=0
+  @spdy=0
+  @maxspd=2
   @cur_frame=o.cur_frame or 1
   @frame_elapsed=o.frame_elapsed or 0
-  @direction=o.direction or 2
- up:=>
-  @direction=0
-  WalkingPlayer @
- down:=>
-  @direction=1
-  WalkingPlayer @
- left:=>
-  @direction=2
-  WalkingPlayer @
- right:=>
-  @direction=3
-  WalkingPlayer @
+ walk:()=>WalkingPlayer @
  stop:=>
   @elapsed=0
   Player @
@@ -31,10 +22,14 @@ export class Player
   {id:1,w:2,h:2,hold:160}
   {id:3,w:2,h:2,hold:5}
  }
- update:(t)=>{}
+ update:(t)=>
+  @elapsed+=1
+  if @elapsed > 30
+   @\stop!
  draw:(t)=>
   @frame_elapsed+=1
   print("frame_elapsed: #{@frame_elapsed}",0,16,2)
+  print("spdx: #{@spdx}, spdy: #{@spdy}",0,24,2)
   if @cur_frame > #@frames
    @cur_frame=1
    @frame_elapsed=0
@@ -45,14 +40,18 @@ export class Player
   spr frame.id,@x,@y,14,3,0,0,2,2
 
 export class WalkingPlayer extends Player
- new:(o)=>super o
- up:=>@
- down:=>@
- left:=>@
- right:=>@
- stop:=>
+ new:(o)=>
+  @spdx=o.spdx or 0
+  @spdy=o.spdy or 0
+  super o
+ walk:(dspdx,dspdy)=>
   @elapsed=0
-  Player @
+  @spdx+=if dspdx < @maxspd
+   dspdx else @maxspd
+  @spdy+=if dspdy < @maxspd
+   dspdy else @maxspd
+  @
+ stop:=>super
  frames:{
   {id:1,w:2,h:2,hold:12}
   {id:5,w:2,h:2,hold:12}
@@ -60,32 +59,32 @@ export class WalkingPlayer extends Player
   {id:9,w:2,h:2,hold:12}
  }
  update:(t)=>
-  switch @direction
-   when 0
-    @y-=1
-   when 1
-    @y+=1
-   when 2
-    @x-=1
-   when 3
-    @x+=1
+  @x+=@spdx/30
+  @y+=@spdy/30
+  super t
  draw:(t)=>super t
 
 p=Player!
 t=0
 
 update=(t)->
- p.elapsed+=1
- if p.elapsed > 60
-  p=p\stop!
+ xInput=0
+ yInput=0
  if btn 0
-  p=p\up!
+  yInput-=1
  if btn 1
-  p=p\down!
+  yInput+=1
  if btn 2
-  p=p\left!
+  xInput-=1
  if btn 3
-  p=p\right!
+  xInput+=1
+
+ if xInput != 0 and yInput != 0
+  p=p\walk xInput,yInput,0.7071
+ else if xInput != 0
+  p=p\walk xInput,0,1
+ else if yInput != 0
+  p=p\walk 0,yInput,1
 
  p\update t
 
