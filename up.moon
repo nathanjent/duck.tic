@@ -3,6 +3,8 @@
 -- desc:   Trying out the type state pattern in MoonScript to model and FSM with types.
 -- script: moon
 
+sign=(n)->n>0 and 1 or n<0 and -1 or 0
+
 export class Player
  new:(o)=>
   if o == nil then o={}
@@ -11,7 +13,7 @@ export class Player
   @y=o.y or 24
   @spdx=0
   @spdy=0
-  @maxspd=2
+  @maxspd=20
   @cur_frame=o.cur_frame or 1
   @frame_elapsed=o.frame_elapsed or 0
  walk:()=>WalkingPlayer @
@@ -43,10 +45,10 @@ export class WalkingPlayer extends Player
   super o
  walk:(dspdx,dspdy)=>
   @elapsed=0
-  @spdx+=if dspdx < @maxspd
-   dspdx else @maxspd
-  @spdy+=if dspdy < @maxspd
-   dspdy else @maxspd
+  if math.abs(@spdx) < @maxspd or sign(@spdx) != sign(dspdx)
+   @spdx+=dspdx
+  if math.abs(@spdy) < @maxspd or sign(@spdy) != sign(dspdy)
+   @spdy+=dspdy
   @
  stop:=>super!
  frames:{
