@@ -22,10 +22,7 @@ export class Player
   {id:1,w:2,h:2,hold:160}
   {id:3,w:2,h:2,hold:5}
  }
- update:(t)=>
-  @elapsed+=1
-  if @elapsed > 30
-   @\stop!
+ update:(t)=>@
  draw:(t)=>
   @frame_elapsed+=1
   print("frame_elapsed: #{@frame_elapsed}",0,16,2)
@@ -51,7 +48,7 @@ export class WalkingPlayer extends Player
   @spdy+=if dspdy < @maxspd
    dspdy else @maxspd
   @
- stop:=>super
+ stop:=>super!
  frames:{
   {id:1,w:2,h:2,hold:12}
   {id:5,w:2,h:2,hold:12}
@@ -61,7 +58,9 @@ export class WalkingPlayer extends Player
  update:(t)=>
   @x+=@spdx/30
   @y+=@spdy/30
-  super t
+  @elapsed+=1
+  if @elapsed > 30
+   @\stop! else @
  draw:(t)=>super t
 
 p=Player!
@@ -86,7 +85,7 @@ update=(t)->
  else if yInput != 0
   p=p\walk 0,yInput,1
 
- p\update t
+ p=p\update t
 
 draw=(t)->
  cls 13
